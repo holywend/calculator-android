@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import java.lang.ArithmeticException
 
 class MainActivity : AppCompatActivity() {
     // numbered button
@@ -25,23 +26,32 @@ class MainActivity : AppCompatActivity() {
     private var btnSubtract: Button? = null
     private var btnEqual: Button? = null
     private var btnCls: Button? = null
+    private var btnDot: Button? = null
 
     // variable
-    private var number = "0"
     private var operand1 = 0.0
     private var operand2 = 0.0
     private var operator = ""
 
     // display
     private var tvCalc: TextView? = null
+    private var tvOperator: TextView? = null
+    private var tvOperand1: TextView? = null
+    private var tvOperand2: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         tvCalc = findViewById(R.id.tvCalc)
+        tvOperator = findViewById(R.id.tvOperator)
+        tvOperand1 = findViewById(R.id.tvOperand1)
+        tvOperand2 = findViewById(R.id.tvOperand2)
 
-        tvCalc?.text = normalizeNumber(number)
+        tvCalc?.text = "0"
+        tvOperator?.text = ""
+        tvOperand1?.text = ""
+        tvOperand2?.text = ""
 
         btnZero = findViewById(R.id.btnZero)
         btnOne = findViewById(R.id.btnOne)
@@ -60,6 +70,7 @@ class MainActivity : AppCompatActivity() {
         btnSubtract = findViewById(R.id.btnSubtract)
         btnEqual = findViewById(R.id.btnEqual)
         btnCls = findViewById(R.id.btnCls)
+        btnDot = findViewById(R.id.btnDot)
 
         btnZero?.setOnClickListener{
             setNumber(0)
@@ -112,31 +123,40 @@ class MainActivity : AppCompatActivity() {
             setOperator("/")
         }
 
+        btnDot?.setOnClickListener {
+            if (!tvCalc?.text.toString().contains(".")){
+                val temp = tvCalc?.text.toString() + "."
+                tvCalc?.text = temp
+            }
+        }
+
         btnEqual?.setOnClickListener{
-            if (operand1 == 0.0 && operator == "") {
-                number = tvCalc?.text.toString()
-            }else{
+            if (operand1 != 0.0 || operator != "") {
                 operand2 = tvCalc?.text.toString().toDouble()
-                when (operator) {
-                    "+" -> {
-                        number = (operand1 + operand2).toString()
+                tvOperand2?.text = normalizeNumber(operand2.toString())
+                try {
+                    when (operator) {
+                        "+" -> {
+                            tvCalc?.text = normalizeNumber((operand1 + operand2).toString())
+                        }
+                        "-" -> {
+                            tvCalc?.text = normalizeNumber((operand1 - operand2).toString())
+                        }
+                        "*" -> {
+                            tvCalc?.text = normalizeNumber((operand1 * operand2).toString())
+                        }
+                        "/" -> {
+                            tvCalc?.text = normalizeNumber((operand1 / operand2).toString())
+                        }
+                        else -> {
+                            tvCalc?.text = "0"
+                        }
                     }
-                    "-" -> {
-                        number = (operand1 - operand2).toString()
-                    }
-                    "*" -> {
-                        number = (operand1 * operand2).toString()
-                    }
-                    "/" -> {
-                        number = (operand1 / operand2).toString()
-                    }
-                    else -> {
-                        number = "0"
-                    }
+                } catch (e: ArithmeticException) {
+                    e.printStackTrace()
                 }
             }
             resetOp()
-            tvCalc?.text = normalizeNumber(number)
         }
     }
 
@@ -155,22 +175,33 @@ class MainActivity : AppCompatActivity() {
 
     // reset display
     private fun resetDisplay() {
-        number = "0"
-        tvCalc?.text = normalizeNumber(number)
+        tvOperator?.text = ""
+        tvOperand1?.text = ""
+        tvOperand2?.text = ""
+        tvCalc?.text = normalizeNumber("0")
     }
 
     // set operator
     private fun setOperator(op: String){
-        operand1 = tvCalc?.text.toString().toDouble()
-        number = "0"
-        tvCalc?.text = normalizeNumber(number)
-        operator=op
+        if (tvCalc?.text.toString() == "0" && op == "-"){
+            tvCalc?.text = "-"
+        }else {
+            operand1 = tvCalc?.text.toString().toDouble()
+            tvOperand1?.text = normalizeNumber(operand1.toString())
+            tvCalc?.text = normalizeNumber("0")
+            operator = op
+            tvOperator?.text = op
+            tvOperand2?.text = ""
+        }
     }
 
     // set number
     private fun setNumber(num: Int) {
-        number = concatNumber(number, num)
-        tvCalc?.text = normalizeNumber(number)
+        if (tvCalc?.text.toString() == "-"){
+            tvCalc?.append(num.toString())
+        }else{
+            tvCalc?.text = normalizeNumber(concatNumber(tvCalc?.text.toString(), num))
+        }
     }
 
     // concat number after button clicked
@@ -186,13 +217,16 @@ class MainActivity : AppCompatActivity() {
         return normalizeNumber(temp)
     }
 
-    // remove trailing zero 0.010000 -> 0.01
     private fun normalizeNumber(number: String): String {
         var temp = String.format("%.6f", number.toDouble())
-        if (temp.contains(".")) {
+//        var temp = DecimalFormat("# ###.##").format(number.toDouble())
+        if (temp.contains(".")) { // remove trailing zero 0.010000 -> 0.01
             val trailing = "[(\\.d+)\\.]*0*\$".toRegex()
             temp = temp.replace(trailing,"")
         }
+//        if (temp.contains(" ")) { // remove extra space
+//            temp = temp.replace(" ","")
+//        }
         return temp
     }
 }

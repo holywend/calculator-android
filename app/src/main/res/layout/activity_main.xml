@@ -8,20 +8,57 @@
     android:orientation="vertical"
     >
 
-    <TextView
-        android:id="@+id/tvCalc"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:background="@color/light_grey"
-        android:padding="10dp"
-        android:textSize="48sp"
-        android:text="@string/calc_text"
-        android:gravity="end|bottom"
-        android:fontFamily="monospace"
-        />
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="118dp"
+        android:layout_height="250dp"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:id="@+id/tvOperand1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/light_grey"
+            android:padding="10dp"
+            android:textSize="24sp"
+            android:gravity="end|bottom"
+            android:fontFamily="monospace"
+            />
+        <TextView
+            android:id="@+id/tvOperator"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/light_grey"
+            android:padding="10dp"
+            android:textSize="24sp"
+            android:gravity="end|bottom"
+            android:fontFamily="monospace"
+            />
+        <TextView
+            android:id="@+id/tvOperand2"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/light_grey"
+            android:padding="10dp"
+            android:textSize="24sp"
+            android:gravity="end|bottom"
+            android:fontFamily="monospace"
+            />
+        <TextView
+            android:id="@+id/tvCalc"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@color/light_grey"
+            android:padding="10dp"
+            android:textSize="48sp"
+            android:text="@string/calc_text"
+            android:gravity="end|bottom"
+            android:fontFamily="monospace"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="95dp"
         android:orientation="horizontal"
         >
         <Button
@@ -67,7 +104,7 @@
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="118dp"
+        android:layout_height="95dp"
         android:orientation="horizontal"
         >
         <Button
@@ -113,7 +150,7 @@
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="118dp"
+        android:layout_height="95dp"
         android:orientation="horizontal"
         >
         <Button
@@ -159,9 +196,19 @@
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="118dp"
+        android:layout_height="95dp"
         android:orientation="horizontal"
         >
+        <Button
+            android:id="@+id/btnDot"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/dot"
+            android:textSize="32sp"
+            android:layout_margin="2dp"
+            style="?android:attr/buttonBarButtonStyle"
+            />
         <Button
             android:id="@+id/btnZero"
             android:layout_width="0dp"
@@ -184,16 +231,6 @@
             style="?android:attr/buttonBarButtonStyle"
             />
         <Button
-            android:id="@+id/btnEqual"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/equal"
-            android:textSize="32sp"
-            android:layout_margin="2dp"
-            style="?android:attr/buttonBarButtonStyle"
-            />
-        <Button
             android:id="@+id/btnAdd"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -204,4 +241,21 @@
             style="?android:attr/buttonBarButtonStyle"
             />
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="95dp"
+        android:orientation="horizontal"
+        >
+        <Button
+            android:id="@+id/btnEqual"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/equal"
+            android:textSize="32sp"
+            android:layout_margin="2dp"
+            style="?android:attr/buttonBarButtonStyle"
+            />
+    </LinearLayout>
+
 </LinearLayout>
